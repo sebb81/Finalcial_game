@@ -1,0 +1,2 @@
+import { defineConfig } from '@playwright/test';
+export default defineConfig({testDir:'./tests',testMatch:'**/*.spec.ts',timeout:180000,expect:{timeout:12000},workers:1,retries:0,reporter:[['list'],['html',{open:'never',outputFolder:'html-test-report'}]],use:{baseURL:new URL('./standalone/JUSQU-AU-30.html',import.meta.url).href,viewport:{width:390,height:844},isMobile:true,hasTouch:true,trace:{mode:'retain-on-failure',screenshots:false,snapshots:true,sources:true},screenshot:'only-on-failure'},projects:[{name:'HTML local · Android Chrome',use:{browserName:'chromium'}}]});

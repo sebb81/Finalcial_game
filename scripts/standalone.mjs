@@ -1,0 +1,30 @@
+import {readFile,writeFile,mkdir} from 'node:fs/promises';
+import {resolve,dirname} from 'node:path';
+const root=resolve(new URL('..',import.meta.url).pathname);
+const dist=resolve(root,'dist');
+const document=await readFile(resolve(dist,'index.html'),'utf8');
+const appPath=document.match(/<script\b[^>]*src="([^"]+)"/)[1];
+const cssPath=document.match(/<link\b[^>]*rel="stylesheet"[^>]*href="([^"]+)"/)[1];
+let app=await readFile(resolve(dist,appPath),'utf8');
+const imports=app.match(/^import\{([^}]+)\}from"(\.\/[^\"]+)";/);
+if(!imports)throw Error('Format du bundle principal non reconnu');
+let runtime=await readFile(resolve(dirname(resolve(dist,appPath)),imports[2]),'utf8');
+const exports=runtime.match(/export\{([^}]+)\};\s*$/);
+if(!exports)throw Error('Format des exports Phaser non reconnu');
+const pairs=s=>s.split(',').map(part=>{const [name,alias]=part.trim().split(/\s+as\s+/);return {name,alias:alias||name};});
+const exported=pairs(exports[1]).map(p=>`${JSON.stringify(p.alias)}:${p.name}`).join(',');
+runtime=runtime.slice(0,exports.index)+`;window.__J30Runtime={${exported}};`;
+const bindings=pairs(imports[1]).map(p=>`${JSON.stringify(p.name)}:${p.alias}`).join(',');
+app=app.slice(imports[0].length);
+app=`const{${bindings}}=window.__J30Runtime;${app}`;
+// No service worker, manifest, external module or server is needed for a local file.
+app=app.replace('if("serviceWorker"in navigator)', 'if(false)');
+if(app.includes('import.meta'))throw Error('Import meta non converti');
+const css=await readFile(resolve(dist,cssPath),'utf8');
+const icon=await readFile(resolve(dist,'icon.svg'));
+const scriptSafe=s=>s.replace(/<\/script/gi,'<\\/script');
+const html=`<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#244d45"><meta name="description" content="Ta vie. Tes choix. Ton argent. Jeu autonome, sans serveur ni abonnement."><title>Jusqu’au 30 — édition HTML autonome</title><link rel="icon" href="data:image/svg+xml;base64,${icon.toString('base64')}"><style>${css}</style></head><body><div id="app"></div><script>(function(){"use strict";${scriptSafe(runtime)}})();</script><script>(function(){"use strict";${scriptSafe(app)}})();</script></body></html>`;
+const output=resolve(root,'standalone','JUSQU-AU-30.html');
+await mkdir(dirname(output),{recursive:true});await writeFile(output,html);
+console.log(`HTML autonome créé : ${output} (${Buffer.byteLength(html)} octets).`);

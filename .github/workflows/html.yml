@@ -1,0 +1,57 @@
+name: Construire le fichier HTML autonome
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'public/**'
+      - 'scripts/**'
+      - 'tests/**'
+      - 'package*.json'
+      - 'tsconfig.json'
+      - 'vite.config.ts'
+      - 'playwright.html.config.ts'
+      - '.github/workflows/html.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: standalone-html
+  cancel-in-progress: true
+jobs:
+  html:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci --no-audit --no-fund
+      - run: npm test
+      - run: npm run build
+      - run: npm run build:html
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:html
+      - name: Conserver le fichier HTML
+        uses: actions/upload-artifact@v4
+        with:
+          name: JUSQU-AU-30-HTML
+          path: standalone/JUSQU-AU-30.html
+      - name: Conserver les résultats
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: html-qa
+          path: |
+            test-results/
+            html-test-report/
+      - name: Livrer le fichier téléchargeable dans le dépôt
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add standalone/JUSQU-AU-30.html
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m "Deliver tested standalone HTML game"
+          git push origin HEAD:main

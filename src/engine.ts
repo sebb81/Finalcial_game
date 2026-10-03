@@ -50,9 +50,9 @@ export function finish(s:State){if(s.day!==30)throw Error('Mois incomplet');s.fi
 export function rest(s:State){if(s.rested===s.step||s.finished)return;s.energy=Math.min(100,s.energy+7);s.rested=s.step;}
 export const KEY='jusquau30-v1';
 export function save(s:State):boolean{try{localStorage.setItem(KEY,JSON.stringify(s));return true;}catch{return false;}}
-export function load():State|null{
+export function decodeSave(value:string|null):State|null{
  try{
-  const s=JSON.parse(localStorage.getItem(KEY)||'null');
+  const s=JSON.parse(value||'null');
   const integer=(v:unknown)=>Number.isSafeInteger(v);
   const bill=(b:any)=>b&&integer(b.day)&&b.day>0&&typeof b.label==='string'&&integer(b.amount)&&b.amount>=0&&typeof b.paid==='boolean';
   if(!s||s.version!==1||!integer(s.step)||s.step<0||s.step>=stories.length||s.day!==stories[s.step].day||!['money','energy','savings','project','goal','color','skin','rested'].every(k=>integer(s[k]))||s.savings<0||s.project<0||s.goal<=0||s.energy<0||s.energy>100||s.color<0||s.color>2||s.skin<0||s.skin>2||s.rested< -1||s.rested>15||typeof s.goalName!=='string'||typeof s.resolved!=='boolean'||typeof s.finished!=='boolean'||(s.finished&&s.step!==15))return null;
@@ -61,4 +61,5 @@ export function load():State|null{
   return s;
  }catch{return null;}
 }
+export function load():State|null{try{return decodeSave(localStorage.getItem(KEY));}catch{return null;}}
 export function commitments(s:State){return [...s.bills,...s.future].filter(b=>!b.paid).reduce((a,b)=>a+b.amount,0);}
