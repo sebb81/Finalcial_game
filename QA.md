@@ -1,8 +1,8 @@
 # Vérification de la première version
 
-Exécutée le 3 octobre 2026. Source testée : `c6538e7b818b02d85d07c7bb42c3f5cfcb3d7d24`.
+Exécutée le 3 octobre 2026. Source testée : `fc0b1f0a3fa8ee6ecbafe3d8b3c5c10ecb2378eb`.
 
-[Exécution GitHub Actions](https://github.com/sebb81/Finalcial_game/actions/runs/37136509729)
+[Exécution GitHub Actions](https://github.com/sebb81/Finalcial_game/actions/runs/37138280279)
 
 ## Résultats
 
@@ -18,13 +18,19 @@ Exécutée le 3 octobre 2026. Source testée : `c6538e7b818b02d85d07c7bb42c3f5cf
 
 Le parcours conservateur du moteur termine avec 105 € disponibles, 250 € de réserve et 300 € de cagnotte. Le parcours tactile modifie la répartition et termine avec 155 € disponibles, 200 € de réserve et 300 € de cagnotte. Dans les deux cas, les avoirs totaux sont de 655 €, sans engagement futur pour ces choix.
 
+## Édition HTML autonome
+
+[Exécution des tests du fichier HTML](https://github.com/sebb81/Finalcial_game/actions/runs/37138280206) : 3 tests réussis en 46,9 s. Le fichier local est ouvert avec une URL `file://` dans Chromium, et le mois entier avec les trois gestes des mini-jeux est joué en 43,5 s. Export et import d’une sauvegarde JSON sont vérifiés, ainsi que la reprise avec le réseau coupé. Aucune requête HTTP n’est émise par l’édition locale. Le fichier comprend environ 1,55 Mo et intègre Phaser, le code, le style et l’icône.
+
 ## Publication
 
-Les tests et la compilation sont validés. Le job global de publication reste en échec parce que l’intégration GitHub n’a pas le droit de **créer initialement** le site Pages. Erreur constatée à l’étape `actions/configure-pages@v5` : `Resource not accessible by integration`.
+**Publication GitHub Pages confirmée le 3 octobre 2026, à 16:51 UTC.** Le job `deploy` rapporte `success` et confirme l’adresse `https://sebb81.github.io/Finalcial_game/`. Le dépôt est public et n’exige pas d’abonnement pour GitHub Pages.
 
-Action unique dans le navigateur mobile : ouvrir [les paramètres Pages](https://github.com/sebb81/Finalcial_game/settings/pages), puis choisir **Build and deployment → Source → GitHub Actions**. Une fois activé, relancer les jobs échoués du workflow ; l’assistant peut le faire via la connexion GitHub.
+- [Jouer dans Chrome](https://sebb81.github.io/Finalcial_game/)
+- [Édition HTML autonome](https://sebb81.github.io/Finalcial_game/JUSQU-AU-30.html)
+- [Fichier conservé dans le dépôt](standalone/JUSQU-AU-30.html)
 
-L’adresse attendue est `https://sebb81.github.io/Finalcial_game/`, mais elle n’est pas annoncée comme publiée avant confirmation du déploiement.
+Le lien de téléchargement de l’accueil permet d’enregistrer le fichier HTML. Sur Android, son ouverture dépend des applications de fichiers et des navigateurs installés. Le lien web permet de jouer directement sans cette manipulation.
 
 ## Limites
 

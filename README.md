@@ -32,7 +32,7 @@ GitHub Actions installe les versions directes fixées, exécute les tests compta
 
 Validation exécutée le 3 octobre 2026 : 15 tests comptables (dont 500 parcours variés), compilation TypeScript/Vite et 3 tests Chromium mobile réussis. Rapport : [QA.md](QA.md).
 
-Le workflow `.github/workflows/pages.yml` publie `dist/` après succès des contrôles. L’activation initiale automatique a été refusée par GitHub au jeton du workflow (`Resource not accessible by integration`). Dans GitHub, **Settings → Pages → Build and deployment → Source → GitHub Actions** doit être activé. Le lien public n’est confirmé qu’après succès du job `deploy`.
+Le workflow `.github/workflows/pages.yml` publie `dist/` après succès des contrôles. Le déploiement est confirmé : **[Jouer dans Chrome](https://sebb81.github.io/Finalcial_game/)**. Aucun abonnement GitHub n’est nécessaire pour ce dépôt public. Pour configurer une autre copie du projet, choisir **Settings → Pages → Build and deployment → Source → GitHub Actions**.
 
 Commandes (exécutées par l’environnement de développement ou GitHub Actions ; aucun terminal requis pour le joueur) :
 
