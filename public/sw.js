@@ -5,7 +5,7 @@ self.addEventListener('install',event=>event.waitUntil((async()=>{
   if(!response.ok)throw new Error('Shell unavailable');
   const html=await response.clone().text();
   await cache.put('./',response);
-  const assets=['./icon.svg','./manifest.webmanifest'];
+  const assets=['./icon.svg','./icon-192.png','./icon-512.png','./manifest.webmanifest'];
   for(const match of html.matchAll(/<(?:script|link)\b[^>]*?(?:src|href)="([^"]+)"/g)){
     const url=new URL(match[1],self.registration.scope);
     if(url.origin===self.location.origin)assets.push(url.href);

@@ -50,5 +50,15 @@ export function finish(s:State){if(s.day!==30)throw Error('Mois incomplet');s.fi
 export function rest(s:State){if(s.rested===s.step||s.finished)return;s.energy=Math.min(100,s.energy+7);s.rested=s.step;}
 export const KEY='jusquau30-v1';
 export function save(s:State):boolean{try{localStorage.setItem(KEY,JSON.stringify(s));return true;}catch{return false;}}
-export function load():State|null{try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(!s||s.version!==1||!Number.isInteger(s.step)||s.step<0||s.step>=stories.length||s.day!==stories[s.step].day||!['money','energy','savings','project','goal'].every(k=>Number.isSafeInteger(s[k]))||s.savings<0||s.project<0||s.energy<0||s.energy>100||!Array.isArray(s.ledger)||!Array.isArray(s.bills)||!Array.isArray(s.future)||!Array.isArray(s.notes)||!Array.isArray(s.plan)||!s.flags||typeof s.resolved!=='boolean')return null;return s;}catch{return null;}}
+export function load():State|null{
+ try{
+  const s=JSON.parse(localStorage.getItem(KEY)||'null');
+  const integer=(v:unknown)=>Number.isSafeInteger(v);
+  const bill=(b:any)=>b&&integer(b.day)&&b.day>0&&typeof b.label==='string'&&integer(b.amount)&&b.amount>=0&&typeof b.paid==='boolean';
+  if(!s||s.version!==1||!integer(s.step)||s.step<0||s.step>=stories.length||s.day!==stories[s.step].day||!['money','energy','savings','project','goal','color','skin','rested'].every(k=>integer(s[k]))||s.savings<0||s.project<0||s.goal<=0||s.energy<0||s.energy>100||s.color<0||s.color>2||s.skin<0||s.skin>2||s.rested< -1||s.rested>15||typeof s.goalName!=='string'||typeof s.resolved!=='boolean'||typeof s.finished!=='boolean'||(s.finished&&s.step!==15))return null;
+  if(!Array.isArray(s.ledger)||!s.ledger.every((e:any)=>e&&integer(e.day)&&e.day>=1&&e.day<=30&&typeof e.label==='string'&&typeof e.category==='string'&&integer(e.amount))||s.money!==12500+s.ledger.reduce((a:number,e:Entry)=>a+e.amount,0))return null;
+  if(!Array.isArray(s.bills)||!s.bills.every(bill)||!Array.isArray(s.future)||!s.future.every(bill)||!Array.isArray(s.notes)||!s.notes.every((n:unknown)=>typeof n==='string')||!Array.isArray(s.plan)||s.plan.length!==4||!s.plan.every((v:unknown)=>integer(v)&&Number(v)>=0)||!s.flags||typeof s.flags!=='object'||Object.values(s.flags).some(v=>typeof v!=='boolean'))return null;
+  return s;
+ }catch{return null;}
+}
 export function commitments(s:State){return [...s.bills,...s.future].filter(b=>!b.paid).reduce((a,b)=>a+b.amount,0);}
