@@ -1,11 +1,11 @@
-const CACHE='jusquau30-v2';
+const CACHE='jusquau30-v3';
 self.addEventListener('install',event=>event.waitUntil((async()=>{
   const cache=await caches.open(CACHE);
   const response=await fetch('./');
   if(!response.ok)throw new Error('Shell unavailable');
   const html=await response.clone().text();
   await cache.put('./',response);
-  const assets=['./icon.svg','./icon-192.png','./icon-512.png','./manifest.webmanifest'];
+  const assets=['./icon.svg','./icon-192.png','./icon-512.png','./manifest.webmanifest'].map(path=>new URL(path,self.registration.scope).href);
   for(const match of html.matchAll(/<(?:script|link)\b[^>]*?(?:src|href)="([^"]+)"/g)){
     const url=new URL(match[1],self.registration.scope);
     if(url.origin===self.location.origin)assets.push(url.href);
