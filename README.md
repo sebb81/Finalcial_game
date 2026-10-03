@@ -30,7 +30,9 @@ Sauvegarde automatique `localStorage`, sur l’appareil et le navigateur utilis�
 
 GitHub Actions installe les versions directes fixées, exécute les tests comptables, vérifie TypeScript, compile la production puis joue un mois dans Chromium avec un écran mobile 390 × 844. Des vérifications couvrent aussi un écran 360 × 640, le paysage, la reprise et le hors connexion. Captures et rapports sont conservés dans l’artefact `mobile-qa`, y compris le lockfile produit pendant la première installation.
 
-Le workflow `.github/workflows/pages.yml` publie `dist/` après succès des contrôles. Dans GitHub, **Settings → Pages → Build and deployment → Source → GitHub Actions** doit être activé. Le lien public n’est confirmé qu’après succès du job `deploy`.
+Validation exécutée le 3 octobre 2026 : 15 tests comptables (dont 500 parcours variés), compilation TypeScript/Vite et 3 tests Chromium mobile réussis. Rapport : [QA.md](QA.md).
+
+Le workflow `.github/workflows/pages.yml` publie `dist/` après succès des contrôles. L’activation initiale automatique a été refusée par GitHub au jeton du workflow (`Resource not accessible by integration`). Dans GitHub, **Settings → Pages → Build and deployment → Source → GitHub Actions** doit être activé. Le lien public n’est confirmé qu’après succès du job `deploy`.
 
 Commandes (exécutées par l’environnement de développement ou GitHub Actions ; aucun terminal requis pour le joueur) :
 
