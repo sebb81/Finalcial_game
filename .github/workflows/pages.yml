@@ -21,6 +21,7 @@ jobs:
       - run: npm ci --no-audit --no-fund
       - run: npm test
       - run: npm run build
+      - run: npm run build:html
       - uses: actions/upload-artifact@v4
         with:
           name: game-build

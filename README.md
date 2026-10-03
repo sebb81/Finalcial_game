@@ -50,6 +50,8 @@ La durée visée et le ressenti des commandes doivent encore être évalués ave
 
 Le workflow `html.yml` construit **un seul fichier**, `standalone/JUSQU-AU-30.html`, avec le moteur Phaser, le code, le style et l’icône intégrés. Il ne demande aucun serveur, aucune dépendance externe ni service worker. Les tests ouvrent ce fichier avec une URL `file://`, jouent un mois complet et vérifient la reprise hors connexion sans requête HTTP.
 
+La page d’accueil du jeu web offre un lien **Télécharger le jeu hors connexion (.html)**. Le fichier est aussi disponible dans le dépôt.
+
 Sur Android : téléchargez le fichier HTML, puis ouvrez-le avec Chrome depuis Téléchargements. Selon l’application de fichiers et la version d’Android, « Ouvrir avec Chrome » peut ne pas être proposé ; un navigateur ou une visionneuse HTML acceptant JavaScript sera alors nécessaire. La version web reste la plus simple à ouvrir.
 
 Le journal propose l’export et l’import de la partie au format JSON. Utilisez-les si le navigateur ne conserve pas la sauvegarde locale du fichier.

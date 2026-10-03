@@ -26,5 +26,5 @@ const scriptSafe=s=>s.replace(/<\/script/gi,'<\\/script');
 const html=`<!doctype html>
 <html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#244d45"><meta name="description" content="Ta vie. Tes choix. Ton argent. Jeu autonome, sans serveur ni abonnement."><title>Jusqu’au 30 — édition HTML autonome</title><link rel="icon" href="data:image/svg+xml;base64,${icon.toString('base64')}"><style>${css}</style></head><body><div id="app"></div><script>(function(){"use strict";${scriptSafe(runtime)}})();</script><script>(function(){"use strict";${scriptSafe(app)}})();</script></body></html>`;
 const output=resolve(root,'standalone','JUSQU-AU-30.html');
-await mkdir(dirname(output),{recursive:true});await writeFile(output,html);
+await mkdir(dirname(output),{recursive:true});await writeFile(output,html);await writeFile(resolve(dist,'JUSQU-AU-30.html'),html);
 console.log(`HTML autonome créé : ${output} (${Buffer.byteLength(html)} octets).`);
